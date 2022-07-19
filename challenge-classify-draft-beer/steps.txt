@@ -1,0 +1,50 @@
+steps
+create ssh from git and pull
+
+pull from gsutil the iage data
+gsutil -m cp -R gs://ml6_junior_ml_engineer_challenge_cv_beer_data/data .
+
+#train
+gcloud ai-platform local train --module-name trainer.task --package-path C:\Users\IT\Desktop\Applications_2022\training\ML6\challenge-classify-draft-beer\trainer
+
+##deploy
+save model on local pc
+gcloud ai-platform local train \
+    --module-name trainer.final_task \
+    --package-path C:\Users\IT\Desktop\Applications_2022\training\ML6\challenge-classify-draft-beer\trainer
+
+#create model resource in google cloud
+
+# copy model recurssively from visual studio code to cloud
+location of deployed model on pc
+location to be stored on cloud ml_16model_benji
+gsutil cp -r C:\Users\IT\Desktop\Applications_2022\training\ML6\challenge-classify-draft-beer\output\exported_model gs://ml6_model_benji
+
+#create version and combine model resourse and copied model
+#check if deployed
+
+ ai-platform predict --region europe-west1 --model exported_model --version V001 --json-instances C:\Users\IT\Desktop\Applications_2022\training\ML6\challenge-classify-draft-beer\check_deployed_model\test.json
+
+
+    
+    x = base_model(input_layer,training = False)
+
+   
+
+    x= tf.keras.layers.GlobalAveragePooling2D()(x)
+    x= tf.keras.layers.Dropout(0.2)(x)
+    x= tf.keras.layers.Dense(units =100,activation='relu')(x)
+    outputs = tf.keras.layers.Dense(units =5,activation='softmax')(x)
+
+    model = tf.keras.Model(input_layer,outputs)
+
+    
+    print(model.summary())
+    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),loss ='sparse_categorical_crossentropy',metrics= ['accuracy'])
+
+
+
+
+
+   
+    
